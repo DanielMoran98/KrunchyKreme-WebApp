@@ -1,0 +1,16 @@
+#checkout table{
+  background-color:white;
+  border-radius:10px;
+  padding:30px;
+
+}
+
+#checkout td{
+  padding:5px;
+  padding-left:15px;
+  padding-right:15px;
+}
+
+#checkout tr:last-of-type{
+  font-size:22px;
+}

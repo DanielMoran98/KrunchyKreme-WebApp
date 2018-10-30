@@ -1,0 +1,19 @@
+body #login{
+
+}
+
+#login #content{
+  width:30%;
+  align:center;
+  text-align:center;
+  margin:10% auto;
+}
+#login #content img{
+  height:auto;
+  width:60%;
+  padding-bottom:20px;
+}
+
+#errorBox{
+  display:hidden;
+}

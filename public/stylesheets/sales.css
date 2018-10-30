@@ -1,0 +1,69 @@
+body{
+  font-family: Varela Round, verdana;
+  margin:0;
+  padding:0;
+}
+li{
+  text-decoration:none;
+  list-style-type:none;
+  text-align:center;
+}
+input{
+  width:10%;
+}
+#splash h1{
+  color:white;
+  text-shadow:
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000;
+
+  font-size: 4em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+#content ul{
+  font-size:24px;
+  background-color:#383650;
+  padding:20px;
+  border-radius:15px;
+  color:white;
+  width:25%
+}
+#content img{
+  width:85%;
+  height:auto;
+  border-radius:15px;
+}
+
+.landingImage{
+  width:100%;
+  z-index: 2;
+  filter: blur(5px);
+  opacity: 0.65;
+
+}
+#scrollDown{
+
+  z-index:2;
+  position:absolute;
+  left:47%;
+  top:18%;
+  width:5%
+}
+
+#sidebar{
+  position:fixed;
+  display:none;
+  left:5%;
+  top:30%;
+  z-index:0;
+  background-color:white;
+  border-radius:10px;
+  padding:30px;
+  max-width:22%;
+
+}

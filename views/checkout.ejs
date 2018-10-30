@@ -1,0 +1,33 @@
+<body>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/checkout.css">
+  <div id="checkout">
+    <center>
+    <h1>Checkout</h1>
+    <form method="POST" action="/order/confirm">
+      <table>
+        <th>Donut</th><th>Amount</th>
+        <tr>
+            <td>Original Glaze</td> <td name="amount1"><%= amount1 %></td>
+        </tr>
+        <tr>
+            <td>Strawberry Original</td> <td name="amount2"><%= amount2 %></td>
+        </tr>
+        <tr>
+            <td>White Chocolate & Milk Choc Drizzle</td> <td name="amount3"><%= amount3 %></td>
+        </tr>
+        <tr>
+            <td>Chocolate & Nutella / Hazlenuts</td> <td name="amount4"><%= amount4 %></td>
+        </tr>
+        <tr>
+            <td>Chocolate & M&Ms</td> <td name="amount5"><%= amount5 %></td>
+        </tr>
+        <tr>
+            <td>Total: <strong name="totalPrice">€<%=totalPrice%></strong></td>
+        </tr>
+      </table>
+
+      <input type="submit" value="Confirm Order">
+    </form>
+    </center>
+  </div>
+</body>

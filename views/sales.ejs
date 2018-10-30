@@ -1,0 +1,128 @@
+
+<head>
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <script src="javascripts/scroll.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/sales.css">
+
+</head>
+
+  <body>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/sales.css"> <!--Only imports css if its in body tags? -->
+
+    <div id="splash">
+    <div data-role="header" style="overflow:hidden;">
+    <center>
+        <img src="images/splash.jpg" class="landingImage">
+        <!--<img src="krunchy.png" width="500px" height="250px" style="position:absolute; left:40%; top:40%; z-index:1;">-->
+
+        <h1 id="landingMsg">KrunchyKreme <br> Ireland's favourite doughnuts!</h1>
+    </center>
+      </div>
+      <img src="images/down-arrow.svg" id="scrollDown">
+    </div><!-- /header -->
+
+<div id="content">
+  <center>
+    <form method="POST" action="/order">
+    <ul>
+      <li><img src="images/donut-1.png"</li>
+      <li>Glazed Original</li>
+      <li>€1.99</li>
+      <li><input type="number" id="amount1" name="amount1" value="0" min="0" max="99"></li>
+    </ul>
+    <ul>
+      <li><img src="images/donut-2.png"</li>
+      <li>Classic Strawberry</li>
+      <li>€2.49</li>
+      <li><input type="number" id="amount2" name="amount2" value="0" min="0" max="99"></li>
+    </ul>
+    <ul>
+      <li><img src="images/donut-3.png"</li>
+      <li>White Chocolate & Milk Choc Drizzle</li>
+      <li>€2.99</li>
+      <li><input type="number" id="amount3" name="amount3" value="0" min="0" max="99"></li>
+    </ul>
+    <ul>
+      <li><img src="images/donut-4.png"</li>
+      <li>Chocolate & Nutella / Hazlenuts</li>
+      <li>€3.49</li>
+      <li><input type="number" id="amount4" name="amount4" value="0" min="0" max="99"></li>
+    </ul>
+    <ul>
+      <li><img src="images/donut-5.png"</li>
+      <li>Chocolate & M&Ms</li>
+      <li>€3.49</li>
+      <li><input type="number" id="amount5" name="amount5" value="0" min="0" max="99"></li>
+    </ul>
+      <button class="ui-shadow ui-btn ui-corner-all" style="background-color: #383650; color:white; margin-bottom:0; padding:30px">Complete Order</button>
+    </form>
+  </center>
+
+
+</div>
+
+  <div id=sidebar>
+    <table>
+      <tr>
+        <th>Donut</th> <th>Amount</th> <th>Price</th>
+      </tr>
+        <tr>
+          <td>Glazed Original</td> <td id="donut1TableAmount">0</td> <td>€1.99</td>
+        </tr>
+        <tr>
+          <td>Original Strawberry</td> <td id="donut2TableAmount">0</td> <td>€2.49</td>
+        </tr>
+        <tr>
+          <td>White Chocolate & Milk Choc Drizzle</td> <td id="donut3TableAmount">0</td> <td>€2.99</td>
+        </tr>
+        <tr>
+          <td>Chocolate & Nutella / Hazlenuts</td> <td id="donut4TableAmount">0</td> <td>€3.49</td>
+        </tr>
+        <tr>
+          <td>Chocolate & M&Ms</td> <td id="donut5TableAmount">0</td> <td>€3.49</td>
+        </tr>
+        <tr>
+          <td><strong id="priceTotal">Total: €0.00</strong><td>
+        </tr>
+    </table>
+  </div>
+  <script>
+      //Adding on doc ready here, doesnt run script
+      $("#scrollDown").click(function()
+      {
+          var pageHeight = $(document).height();
+          $('html, body').animate({ scrollTop: 750 }, 450)
+      });
+
+      $(document).scroll(function () {
+        var y = $(this).scrollTop();
+        if (y > 600) {
+            $('#sidebar').fadeIn();
+        } else {
+            $('#sidebar').fadeOut();
+        }
+      });
+
+
+      var priceTotal = 0;
+
+      $(document).on('change', function()
+      {
+        $('#donut1TableAmount').text($('#amount1').val());
+        $('#donut2TableAmount').text($('#amount2').val());
+        $('#donut3TableAmount').text($('#amount3').val());
+        $('#donut4TableAmount').text($('#amount4').val());
+        $('#donut5TableAmount').text($('#amount5').val());
+
+        priceTotal = $('#amount1').val() * 1.99 + $('#amount2').val() * 2.49 + $('#amount3').val() * 2.99 + $('#amount4').val() * 3.49 + $('#amount5').val() * 3.49;
+        priceTotal = parseFloat(Math.round(priceTotal * 100) / 100).toFixed(2);
+        $('#priceTotal').text("Total: €" + priceTotal);
+      })
+
+      //console.log(total);
+
+    </script>
+  </body>
