@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var session = require('express-session');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -18,7 +18,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(session({secret:'413rewfafgvzfbdfb', saveUninitialized: false, resave:false}));
+app.use(function(req, res, next) {
+  res.locals.access = req.session.access;
+  res.locals.amount1 = req.session.amount1;
+  res.locals.amount2 = req.session.amount2;
+  res.locals.amount3 = req.session.amount3;
+  res.locals.amount4 = req.session.amount4;
+  res.locals.amount5 = req.session.amount5;
+  res.locals.totalPrice = req.session.totalPrice;
+  next();
+});
 
 app.get('/sales', function(req, res)
 {
@@ -27,12 +37,31 @@ app.get('/sales', function(req, res)
   res.render('sales.ejs');
 });
 
+app.get('/logout', function(req, res){
+    req.session.destroy();
+    res.send('Logged out');
+})
+app.get('/login', function(req, res){
+  if(req.session.access == 2)
+  {
+    res.render('manager.ejs')
+  }else if(req.session.access == 1)
+  {
+    res.render('chef.ejs');
+  }else if(req.session.access == 0)
+  {
+    res.render('sales.ejs')
+  }else{
+    res.redirect('/');
+  }
+});
+
 app.post('/login', function(req, res)
 {
   var mysql = require('mysql')
   var username = req.body.username;
   var password = req.body.password;
-
+  req.session.username = username;
   var connection = mysql.createConnection({
         host     : 'localhost',
         user     : 'root',
@@ -53,16 +82,19 @@ app.post('/login', function(req, res)
       if(results[0].access == 2)
       {
         console.log("Logging in " +username+ " as manager")
+        req.session.access = 2;
         res.render('manager.ejs');
       }
       if(results[0].access == 1)
       {
         console.log("Logging in " +username+ " as chef")
+        req.session.access = 1;
         res.render('chef.ejs');
       }
       if(results[0].access == 0)
       {
         console.log("Logging in " +username+ " as sales")
+        req.session.access = 0;
         res.render('sales.ejs');
       }
 
@@ -72,27 +104,49 @@ app.post('/login', function(req, res)
   connection.end();
   });
 
+  app.get('/order', function(req, res)
+  {
+    if(req.session.access == 0){
+      res.render('checkout.ejs')
+    }else
+    {
+      res.render('index.ejs',{info: 'Incorrect permissions to view that page.'})
+    }
+  })
+
+
+
   app.post('/order', function(req, res)
   {
+    console.log(req.session);
+    console.log("ACCESS LEVEL ===== " + req.session.access)
+    req.session.amount1 = req.body.amount1;
+    req.session.amount2 = req.body.amount2;
+    req.session.amount3 = req.body.amount3;
+    req.session.amount4 = req.body.amount4;
+    req.session.amount5 = req.body.amount5;
+
+    console.log(req.session.amount1 + " is the session variable");
     var amount1 = Number(req.body.amount1);
     var amount2 = Number(req.body.amount2);
     var amount3 = Number(req.body.amount3);
     var amount4 = Number(req.body.amount4);
     var amount5 = Number(req.body.amount5);
-    var price1 = amount1*1.99;
-    var price2 = amount2*2.49;
-    var price3 = amount3*2.99;
-    var price4 = amount4*3.49;
-    var price5 = amount5*3.49;
+    var price1 = req.session.amount1*1.99;
+    var price2 = req.session.amount2*2.49;
+    var price3 = req.session.amount3*2.99;
+    var price4 = req.session.amount4*3.49;
+    var price5 = req.session.amount5*3.49;
     var totalPrice = price1+price2+price3+price4+price5;
     totalPrice = parseFloat(Math.round(totalPrice * 100) / 100).toFixed(2);
 
-    console.log("Amount: " + amount1)
-    console.log("Amount: " + amount2)
-    console.log("Amount: " + amount3)
-    console.log("Amount: " + amount4)
-    console.log("Amount: " + amount5)
-    console.log("Total: " + totalPrice)
+    req.session.totalPrice = totalPrice;
+    console.log("Amount: " + req.session.amount1)
+    console.log("Amount: " + req.session.amount2)
+    console.log("Amount: " + req.session.amount3)
+    console.log("Amount: " + req.session.amount4)
+    console.log("Amount: " + req.session.amount5)
+    console.log("Total: " + req.session.totalPrice)
 
     res.render('checkout.ejs', {amount1:amount1,amount2:amount2,amount3:amount3,amount4:amount4,amount5:amount5, totalPrice:totalPrice});
   });
@@ -101,31 +155,21 @@ app.post('/login', function(req, res)
 
   app.post('/order/confirm', function(req, res)
   {
+    var username = req.session.username;
     var amount1 = Number(req.body.amount1);
-    console.log(req.body);
-    console.log(amount1);
-    res.end();
-    /*var amount2 = Number(req.body.amount2);
-    var amount3 = Number(req.body.amount3);
-    var amount4 = Number(req.body.amount4);
-    var amount5 = Number(req.body.amount5);
-    var price1 = amount1*1.99;
-    var price2 = amount2*2.49;
-    var price3 = amount3*2.99;
-    var price4 = amount4*3.49;
-    var price5 = amount5*3.49;
-    var totalPrice = price1+price2+price3+price4+price5;
-    totalPrice = parseFloat(Math.round(totalPrice * 100) / 100).toFixed(2);
+    var amount2 = Number(req.session.amount2)
+    var amount3 = Number(req.session.amount3)
+    var amount4 = Number(req.session.amount4)
+    var amount5 = Number(req.session.amount5)
+    var totalPrice = Number(req.session.totalPrice)
 
-    console.log("Amount: " + amount1)
-    console.log("Amount: " + amount2)
-    console.log("Amount: " + amount3)
-    console.log("Amount: " + amount4)
-    console.log("Amount: " + amount5)
-    console.log("Total: " + totalPrice)
-*/
-  /**  var mysql = require('mysql');
-    var query = "INSERT INTO `test`.`users` (`seller`, `donut1-count`, `donut2-count`, `donut3-count`, `donut4-count`, `donut5-count`, `totalPrice`) VALUES (sales1'"+amount1+"','"+amount2+"','"+amount3+"','"+amount4+"','"+amount5+"','"+totalPrice+"');"
+    console.log("Confirming total price as: " +totalPrice);
+
+    try{
+
+
+    var mysql = require('mysql');
+
     var connection = mysql.createConnection
     ({
           host     : 'localhost',
@@ -134,13 +178,19 @@ app.post('/login', function(req, res)
           database : 'project'
     });
 
-    connection.query(sql, function()
+    var sql = "INSERT INTO `project`.`orders` (`seller`, `donut1-count`, `donut2-count`, `donut3-count`, `donut4-count`, `donut5-count`, `totalPrice`) VALUES ('"+username+"','"+amount1+"','"+amount2+"','"+amount3+"','"+amount4+"','"+amount5+"','"+totalPrice+"');"
+    var query = connection.query(sql, function(err, result)
     {
+      if(err) throw err
       console.log("Inserting data...");
+      res.render("confirmation.ejs");
     });
 
     connection.end();
-  **/
+  }catch(e){
+    console.log(e);
+  }
+
   });
 
 app.use('/', indexRouter);

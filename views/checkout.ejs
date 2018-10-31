@@ -1,3 +1,9 @@
+<head>
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+</head>
 <body>
   <link rel="stylesheet" type="text/css" href="/stylesheets/checkout.css">
   <div id="checkout">
@@ -7,22 +13,22 @@
       <table>
         <th>Donut</th><th>Amount</th>
         <tr>
-            <td>Original Glaze</td> <td name="amount1"><%= amount1 %></td>
+            <td>Original Glaze</td> <td name="amount1"><%= locals.amount1 %></td>
         </tr>
         <tr>
-            <td>Strawberry Original</td> <td name="amount2"><%= amount2 %></td>
+            <td>Strawberry Original</td> <td name="amount2"><%= locals.amount2 %></td>
         </tr>
         <tr>
-            <td>White Chocolate & Milk Choc Drizzle</td> <td name="amount3"><%= amount3 %></td>
+            <td>White Chocolate & Milk Choc Drizzle</td> <td name="amount3"><%= locals.amount3 %></td>
         </tr>
         <tr>
-            <td>Chocolate & Nutella / Hazlenuts</td> <td name="amount4"><%= amount4 %></td>
+            <td>Chocolate & Nutella / Hazlenuts</td> <td name="amount4"><%= locals.amount4 %></td>
         </tr>
         <tr>
-            <td>Chocolate & M&Ms</td> <td name="amount5"><%= amount5 %></td>
+            <td>Chocolate & M&Ms</td> <td name="amount5"><%= locals.amount5 %></td>
         </tr>
         <tr>
-            <td>Total: <strong name="totalPrice">€<%=totalPrice%></strong></td>
+            <td>Total: <strong name="totalPrice">€<%=locals.totalPrice%></strong></td>
         </tr>
       </table>
 
