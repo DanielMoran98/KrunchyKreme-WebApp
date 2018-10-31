@@ -19,7 +19,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret:'413rewfafgvzfbdfb', saveUninitialized: false, resave:false}));
-app.use(function(req, res, next) {
+app.use(function(req, res, next) { //Add Session vars to be used in ejs files
+  res.locals.username = req.session.username;
   res.locals.access = req.session.access;
   res.locals.amount1 = req.session.amount1;
   res.locals.amount2 = req.session.amount2;
@@ -212,4 +213,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.listen(3000, function()
+{
+  console.log("listening on port 3000!")
+})
 module.exports = app;
