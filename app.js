@@ -22,7 +22,7 @@ app.use(session({
   secret: 'kkwurhglkhwrglkwregb',
   resave: false,
   saveUninitialized: true,
-  
+
 }))
 app.use(function(req, res, next) { //Add Session vars to be used in ejs files
   res.locals.username = req.session.username;
@@ -58,6 +58,10 @@ app.get('/login', function(req, res){
   }
 });
 
+app.get('/home', function(req, res)
+{
+
+});
 
 app.post('/login', function(req, res)
 {
