@@ -162,7 +162,12 @@ app.get('/chef', function(req, res)
 
 app.get('/manager', function(req, res)
  {
+   if(req.session.access == 2)
+   {
     res.render('manager.ejs');
+  }else{
+    res.redirect('/');
+  }
  });
 
 app.get('/order', function(req, res)
@@ -288,18 +293,12 @@ app.post('/stockupdate', function(req, res)
       }catch(e){
           console.log(e);
       };
-
-      app.get('/stockupdate', function(req, res)
-      {
-        res.redirect('/chef');
-      });
-
-
-    //  res.redirect('/chef');
-
-
-
     });
+
+  app.get('/stockupdate', function(req, res)
+  {
+    res.redirect('/chef');
+  });
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

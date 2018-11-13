@@ -6,6 +6,8 @@
   background-color:#001f3f;
   width:100%;
   opacity:0.9;
+  padding-top:10px;
+  padding-bottom:10px;
 }
 #nav li{
   display:block;
