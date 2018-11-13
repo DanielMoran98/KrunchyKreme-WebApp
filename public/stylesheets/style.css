@@ -1,8 +1,17 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: Varela Round, verdana;
+  text-shadow: none !important;
 }
 
 a {
   color: #00B7FF;
+}
+
+.submitButton{
+  background-color: #001f3f !important;
+  color:white !important;
+  margin-bottom:0;
+  padding:30px;
+
 }

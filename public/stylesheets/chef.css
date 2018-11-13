@@ -1,0 +1,10 @@
+#chefContent table{
+  background-color:white;
+  border-radius:10px;
+  padding:30px;
+}
+
+#chefContent td,th{
+  padding-left:15px;
+  padding-right:15px;
+}
