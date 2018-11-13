@@ -6,9 +6,10 @@
 </head>
 <body>
   <link rel="stylesheet" type="text/css" href="/stylesheets/checkout.css">
-  <div id="checkout">
+  <% include templates/nav%>
+  <div id="checkout" style= "padding-top:100px;" >
     <center>
-    <h1>Checkout</h1>
+    <h1 style="">Checkout</h1>
     <form method="POST" action="/order/confirm">
       <table>
         <th>Donut</th><th>Amount</th>
