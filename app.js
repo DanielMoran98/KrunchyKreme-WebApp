@@ -49,10 +49,10 @@ app.get('/login', function(req, res){
     res.redirect('/manager')
   }else if(req.session.access == 1)
   {
-    res.render('chef.ejs');
+    res.redirect('/chef');
   }else if(req.session.access == 0)
   {
-    res.render('sales.ejs')
+    res.redirect('/sales')
   }else{
     res.redirect('/');
   }
@@ -90,19 +90,20 @@ app.post('/login', function(req, res)
       {
         console.log("Logging in " +username+ " as manager")
         req.session.access = 2;
-        res.render('manager.ejs');
+        res.redirect('/manager');
       }
       if(results[0].access == 1)
       {
         console.log("Logging in " +username+ " as chef")
         req.session.access = 1;
-        res.render('chef.ejs');
+
+        res.redirect('/chef');
       }
       if(results[0].access == 0)
       {
         console.log("Logging in " +username+ " as sales")
         req.session.access = 0;
-        res.render('sales.ejs');
+        res.redirect('/sales');
       }
 
 
@@ -113,7 +114,6 @@ app.post('/login', function(req, res)
 
   app.get('/sales', function(req, res)
   {
-    console.log("test");
     console.log(req.session.access);
     if(req.session.access == 0)
     {
@@ -124,10 +124,46 @@ app.post('/login', function(req, res)
 
   });
 
-app.get('/manager', function(req, res)
-{
-    res.render('manager.ejs');
-})
+  app.get('/chef', function(req, res)
+  {
+    console.log(req.session.access);
+    if(req.session.access == 1)
+    {
+
+
+      var mysql = require('mysql');
+      var connection = mysql.createConnection
+      ({
+            host     : 'localhost',
+            user     : 'root',
+            password : '',
+            database : 'project'
+      });
+
+      var sql = "SELECT stock FROM stock";
+      var query = connection.query(sql, function(err, result)
+      {
+        if(err) throw err
+        console.log("Data: " + result[0].stock);
+        res.render('chef.ejs', {result});
+
+      });
+      //res.render("chef.ejs");
+      connection.end();
+
+
+
+
+
+    }else{
+      res.redirect('/');
+    }
+  });
+
+  app.get('/manager', function(req, res)
+  {
+      res.render('manager.ejs');
+  })
 
 app.get('/order', function(req, res)
   {
@@ -216,6 +252,12 @@ app.post('/order/confirm', function(req, res)
     }
 
   });
+
+  app.post('/stockupdate', function(req, res)
+    {
+      console.log(req.body.donut1update);
+      res.render('chef.ejs');
+    });
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

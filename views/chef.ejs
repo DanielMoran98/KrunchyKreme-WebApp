@@ -15,29 +15,31 @@
     <h1 style="padding-top: 100px;">Chef</h1>
 
     <div id="chefContent">
+      <form method="POST" action="/stockupdate">
         <table>
           <tr>
             <th>Donut</th><th>Price</th><th>Stock</th><th>Update</th>
           </tr>
           <tr>
-            <td>Original Glazed</td><td>€1.99</td><td>50</td><td><input type="number" name="donut1update" value="donut1update"></td>
+            <td>Original Glazed</td><td>€1.99</td><td><%=result[0].stock %></td><td><input type="number" name="donut1update" value="0"></td>
           </tr>
           <tr>
-            <td>Strawberry Original</td><td>€2.49</td><td>50</td><td><input type="number" name="donut2update" value="donut2update"></td>
+            <td>Strawberry Original</td><td>€2.49</td><td> <%=result[1].stock %> </td><td><input type="number" name="donut2update" value="0"></td>
           </tr>
           <tr>
-            <td>White Chocolate & Milk Choc Drizzle</td><td>€2.99</td><td>50</td><td><input type="number" name="donut3update" value="donut3update"></td>
+            <td>White Chocolate & Milk Choc Drizzle</td><td>€2.99</td><td><%=result[2].stock %></td><td><input type="number" name="donut3update" value="0"></td>
           </tr>
           <tr>
-            <td>Chocolate & Nutella / Hazlenuts</td><td>€3.49</td><td>50</td><td><input type="number" name="donut4update" value="donut4update"></td>
+            <td>Chocolate & Nutella / Hazlenuts</td><td>€3.49</td><td><%=result[3].stock %></td><td><input type="number" name="donut4update" value="0"></td>
           </tr>
           <tr>
-            <td>Chocolate & M&Ms</td><td>€3.49</td><td>50</td><td><input type="number" name="donut5update" value="donut5update"></td>
+            <td>Chocolate & M&Ms</td><td>€3.49</td><td><%=result[4].stock %></td><td><input type="number" name="donut5update" value="0"></td>
           </tr>
           <tr>
             <button type="submit" name="updateStock" class="submitButton" style="position:fixed; bottom:0px; border-width:0px; border-bottom-left-radius:0px; border-bottom-right-radius:0px;">Update Stock!</button>
           </tr>
         </table>
+        </form>
     </div>
   </center>
 </body>
