@@ -22,7 +22,7 @@ app.use(session({
   secret: 'kkwurhglkhwrglkwregb',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true }
+  
 }))
 app.use(function(req, res, next) { //Add Session vars to be used in ejs files
   res.locals.username = req.session.username;
@@ -36,12 +36,7 @@ app.use(function(req, res, next) { //Add Session vars to be used in ejs files
   next();
 });
 
-app.get('/sales', function(req, res)
-{
-  console.log("test");
-  console.log("test 2");
-  res.render('sales.ejs');
-});
+
 
 app.all('/logout', function(req, res){
     req.session.destroy();
@@ -112,6 +107,18 @@ app.post('/login', function(req, res)
   connection.end();
   });
 
+  app.get('/sales', function(req, res)
+  {
+    console.log("test");
+    console.log(req.session.access);
+    if(req.session.access == 0)
+    {
+      res.render('sales.ejs');
+    }else{
+      res.redirect('/');
+    }
+
+  });
 
 app.get('/manager', function(req, res)
 {
