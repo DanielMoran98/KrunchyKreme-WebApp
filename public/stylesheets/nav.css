@@ -1,0 +1,25 @@
+#nav{
+  z-index:5;
+  position:fixed;
+  left:0%;
+  top:0%;
+  background-color:#001f3f;
+  width:100%;
+  opacity:0.9;
+}
+#nav li{
+  display:block;
+  padding:50px;
+  padding-top:17px;
+  padding-bottom:17px;
+  background-color:#001f3f;
+  color:white;
+  font-style:normal;
+}
+#nav img{
+  display:block;
+  position: fixed;
+  z-index:6;
+  left:45%;
+  opacity:2.0;
+}

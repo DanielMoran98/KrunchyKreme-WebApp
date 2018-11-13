@@ -5,24 +5,27 @@
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
   <script src="javascripts/scroll.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/stylesheets/sales.css">
 
 </head>
 
   <body>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/sales.css"> <!--Only imports css if its in body tags? -->
+    <!--<link rel="stylesheet" type="text/css" href="/stylesheets/sales.css"> Only imports css if its in body tags? -->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/sales.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/nav.css">
+
+    <% include templates/nav%>
+
 
     <div id="splash">
-    <div data-role="header" style="overflow:hidden;">
-    <center>
-        <img src="images/splash.jpg" class="landingImage">
-        <!--<img src="krunchy.png" width="500px" height="250px" style="position:absolute; left:40%; top:40%; z-index:1;">-->
+      <div data-role="header" style="overflow:hidden;">
 
-        <h1 id="landingMsg">KrunchyKreme <br> Ireland's favourite doughnuts!</h1>
-    </center>
+        <center>
+          <img src="images/splash.jpg" class="landingImage">
+          <h1 id="landingMsg">KrunchyKreme <br> Ireland's favourite doughnuts!</h1>
+        </center>
       </div>
-
-    </div><!-- /header -->
+      <img src="images/down-arrow.svg" id="scrollDown">
+    </div>
 
 <div id="content">
   <center>
@@ -57,7 +60,7 @@
       <li>€3.49</li>
       <li><input type="number" id="amount5" name="amount5" value="0" min="0" max="99"></li>
     </ul>
-      <button class="ui-shadow ui-btn ui-corner-all" style="background-color: #383650; color:white; margin-bottom:0; padding:30px">Complete Order</button>
+      <button class="ui-shadow ui-btn ui-corner-all" style="background-color: #001f3f; color:white; margin-bottom:0; padding:30px">Complete Order</button>
     </form>
   </center>
 
@@ -88,7 +91,6 @@
           <td><strong id="priceTotal">Total: €0.00</strong><td>
         </tr>
     </table>
-    <img src="images/down-arrow.svg" id="scrollDown">
   </div>
   <script>
       //Adding on doc ready here, doesnt run script

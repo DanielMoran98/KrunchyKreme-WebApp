@@ -1,3 +1,7 @@
+body{
+    font-family: Varela Round, verdana;
+}
+
 #checkout table{
   background-color:white;
   border-radius:10px;

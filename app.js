@@ -18,7 +18,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({secret:'413rewfafgvzfbdfb', saveUninitialized: false, resave:false}));
+app.use(session({
+  secret: 'kkwurhglkhwrglkwregb',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
 app.use(function(req, res, next) { //Add Session vars to be used in ejs files
   res.locals.username = req.session.username;
   res.locals.access = req.session.access;
@@ -38,14 +43,15 @@ app.get('/sales', function(req, res)
   res.render('sales.ejs');
 });
 
-app.get('/logout', function(req, res){
+app.all('/logout', function(req, res){
     req.session.destroy();
-    res.send('Logged out');
+    res.redirect('/');
 })
+
 app.get('/login', function(req, res){
   if(req.session.access == 2)
   {
-    res.render('manager.ejs')
+    res.redirect('/manager')
   }else if(req.session.access == 1)
   {
     res.render('chef.ejs');
@@ -56,6 +62,7 @@ app.get('/login', function(req, res){
     res.redirect('/');
   }
 });
+
 
 app.post('/login', function(req, res)
 {
@@ -105,7 +112,13 @@ app.post('/login', function(req, res)
   connection.end();
   });
 
-  app.get('/order', function(req, res)
+
+app.get('/manager', function(req, res)
+{
+    res.render('manager.ejs');
+})
+
+app.get('/order', function(req, res)
   {
     if(req.session.access == 0){
       res.render('checkout.ejs')
@@ -117,7 +130,7 @@ app.post('/login', function(req, res)
 
 
 
-  app.post('/order', function(req, res)
+app.post('/order', function(req, res)
   {
     console.log(req.session);
     console.log("ACCESS LEVEL ===== " + req.session.access)
@@ -154,8 +167,9 @@ app.post('/login', function(req, res)
 
 
 
-  app.post('/order/confirm', function(req, res)
+app.post('/order/confirm', function(req, res)
   {
+
     var username = req.session.username;
     var amount1 = Number(req.body.amount1);
     var amount2 = Number(req.session.amount2)
@@ -167,30 +181,28 @@ app.post('/login', function(req, res)
     console.log("Confirming total price as: " +totalPrice);
 
     try{
+        var mysql = require('mysql');
 
+        var connection = mysql.createConnection
+        ({
+              host     : 'localhost',
+              user     : 'root',
+              password : '',
+              database : 'project'
+        });
 
-    var mysql = require('mysql');
+        var sql = "INSERT INTO `project`.`orders` (`seller`, `donut1-count`, `donut2-count`, `donut3-count`, `donut4-count`, `donut5-count`, `totalPrice`) VALUES ('"+username+"','"+amount1+"','"+amount2+"','"+amount3+"','"+amount4+"','"+amount5+"','"+totalPrice+"');"
+        var query = connection.query(sql, function(err, result)
+        {
+          if(err) throw err
+          console.log("Inserting data...");
 
-    var connection = mysql.createConnection
-    ({
-          host     : 'localhost',
-          user     : 'root',
-          password : '',
-          database : 'project'
-    });
-
-    var sql = "INSERT INTO `project`.`orders` (`seller`, `donut1-count`, `donut2-count`, `donut3-count`, `donut4-count`, `donut5-count`, `totalPrice`) VALUES ('"+username+"','"+amount1+"','"+amount2+"','"+amount3+"','"+amount4+"','"+amount5+"','"+totalPrice+"');"
-    var query = connection.query(sql, function(err, result)
-    {
-      if(err) throw err
-      console.log("Inserting data...");
-      res.render("confirmation.ejs");
-    });
-
-    connection.end();
-  }catch(e){
-    console.log(e);
-  }
+        });
+        res.render("confirmation.ejs");
+        connection.end();
+    }catch(e){
+        console.log(e);
+    }
 
   });
 

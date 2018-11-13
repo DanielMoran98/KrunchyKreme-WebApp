@@ -27,7 +27,7 @@ input{
 }
 #content ul{
   font-size:24px;
-  background-color:#383650;
+  background-color:#00764F;
   padding:20px;
   border-radius:15px;
   color:white;
@@ -66,4 +66,9 @@ input{
   padding:30px;
   max-width:22%;
 
+}
+
+
+form{
+  margin-bottom:0px;
 }

@@ -1,0 +1,4 @@
+Navbar with logout and logo
+  -Make navbar transparent until scroll
+  
+Update stock after order complete
