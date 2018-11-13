@@ -112,7 +112,7 @@ app.post('/login', function(req, res)
   connection.end();
   });
 
-  app.get('/sales', function(req, res)
+app.get('/sales', function(req, res)
   {
     console.log(req.session.access);
     if(req.session.access == 0)
@@ -124,7 +124,7 @@ app.post('/login', function(req, res)
 
   });
 
-  app.get('/chef', function(req, res)
+app.get('/chef', function(req, res)
   {
     console.log(req.session.access);
     if(req.session.access == 1)
@@ -160,10 +160,10 @@ app.post('/login', function(req, res)
     }
   });
 
-  app.get('/manager', function(req, res)
-  {
-      res.render('manager.ejs');
-  })
+app.get('/manager', function(req, res)
+ {
+    res.render('manager.ejs');
+ });
 
 app.get('/order', function(req, res)
   {
@@ -174,8 +174,6 @@ app.get('/order', function(req, res)
       res.render('index.ejs',{info: 'Incorrect permissions to view that page.'})
     }
   })
-
-
 
 app.post('/order', function(req, res)
   {
@@ -211,8 +209,6 @@ app.post('/order', function(req, res)
 
     res.render('checkout.ejs', {amount1:amount1,amount2:amount2,amount3:amount3,amount4:amount4,amount5:amount5, totalPrice:totalPrice});
   });
-
-
 
 app.post('/order/confirm', function(req, res)
   {
@@ -253,10 +249,56 @@ app.post('/order/confirm', function(req, res)
 
   });
 
-  app.post('/stockupdate', function(req, res)
+app.post('/stockupdate', function(req, res)
     {
-      console.log(req.body.donut1update);
-      res.render('chef.ejs');
+      console.log("Donut update values");
+      var don1 = req.body.donut1update;
+      var don2 = req.body.donut2update;
+      var don3 = req.body.donut3update;
+      var don4 = req.body.donut4update;
+      var don5 = req.body.donut5update;
+
+      try{
+          var mysql = require('mysql');
+
+          var connection = mysql.createConnection
+          ({
+                host     : 'localhost',
+                user     : 'root',
+                password : '',
+                database : 'project'
+          });
+
+          var sql = "UPDATE stock SET stock = (stock + "+don1+") WHERE name = \"donut-1\";";
+          console.log(sql);
+          var query = connection.query(sql, function(err, result) {if(err) throw err});
+          var sql = "UPDATE stock SET stock = (stock + "+don2+") WHERE name = \"donut-2\";";
+          var query = connection.query(sql, function(err, result) {if(err) throw err});
+          var sql = "UPDATE stock SET stock = (stock + "+don3+") WHERE name = \"donut-3\";";
+          var query = connection.query(sql, function(err, result) {if(err) throw err});
+          var sql = "UPDATE stock SET stock = (stock + "+don4+") WHERE name = \"donut-4\";";
+          var query = connection.query(sql, function(err, result) {if(err) throw err});
+          var sql = "UPDATE stock SET stock = (stock + "+don5+") WHERE name = \"donut-5\";";
+          var query = connection.query(sql, function(err, result) {if(err) throw err});
+          setTimeout(function() {
+              res.redirect("/chef");
+            }, 100);
+
+          connection.end();
+      }catch(e){
+          console.log(e);
+      };
+
+      app.get('/stockupdate', function(req, res)
+      {
+        res.redirect('/chef');
+      });
+
+
+    //  res.redirect('/chef');
+
+
+
     });
 
 app.use('/', indexRouter);
