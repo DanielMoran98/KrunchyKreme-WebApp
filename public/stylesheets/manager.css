@@ -18,7 +18,15 @@
 }
 
 #managerContent table{
-  text-align:center;
   width:100%;
-  border:1px solid green;
+  font-size: 1.2rem;
+  padding: 10px;
+}
+#managerContent table td{
+  padding: 5px 0 5px 0;
+  text-align-last: center; 
+}
+
+#managerContent table td::after{
+
 }

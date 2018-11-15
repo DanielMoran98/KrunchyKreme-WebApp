@@ -79,7 +79,7 @@ app.post('/login', function(req, res)
 
   var sql = "SELECT * FROM users WHERE username = '" + username +"' AND password = '" + password + "'";
 
-  connection.connect();
+  //connection.connect();
 
   var query = connection.query(sql, function (error, results, fields){
     if (error) next(error);
@@ -110,7 +110,7 @@ app.post('/login', function(req, res)
 
   }catch(e){console.log(e); console.log("Username or Password is incorrect"); res.render('index.ejs', {info: "Invalid Login"}); }
   });
-  connection.end();
+  //connection.end();
   });
 
 app.get('/sales', function(req, res)
@@ -130,17 +130,7 @@ app.get('/chef', function(req, res)
     console.log(req.session.access);
     if(req.session.access == 1)
     {
-
-
-      var mysql = require('mysql');
-      var connection = mysql.createConnection
-      ({
-            host     : 'localhost',
-            user     : 'root',
-            password : '',
-            database : 'project'
-      });
-
+      //connection.connect();
       var sql = "SELECT stock FROM stock";
       var query = connection.query(sql, function(err, result)
       {
@@ -150,11 +140,7 @@ app.get('/chef', function(req, res)
 
       });
       //res.render("chef.ejs");
-      connection.end();
-
-
-
-
+      //connection.end();
 
     }else{
       res.redirect('/');
@@ -165,11 +151,35 @@ app.get('/manager', function(req, res)
  {
    if(req.session.access == 2)
    {
-    res.render('manager.ejs');
-  }else{
+     var sql = "SELECT sum(`donut1-count`) as \"donut1\", sum(`donut2-count`)as \"donut2\", sum(`donut3-count`)as \"donut3\", sum(`donut4-count`)as \"donut4\", sum(`donut5-count`)as \"donut5\" FROM orders;"
+     try
+     {
+       var query = connection.query(sql, function (error, results, fields)
+       {
+         if (error) throw(error);
+
+         console.log("results[0]: "+ JSON.stringify(results[0]));
+         res.render('manager.ejs', {results} );
+       });
+
+
+
+
+
+     }catch(e)
+     {
+       console.log(e);
+       console.log("Error fetching data");
+       res.render('index.ejs', {info: "Error fetching data"});
+     }
+
+
+
+  }else
+  {
     res.redirect('/');
   }
- });
+});
 
 app.get('/order', function(req, res)
   {
@@ -220,7 +230,7 @@ app.post('/order/confirm', function(req, res)
   {
 
     var username = req.session.username;
-    var amount1 = Number(req.body.amount1);
+    var amount1 = Number(req.session.amount1);
     var amount2 = Number(req.session.amount2)
     var amount3 = Number(req.session.amount3)
     var amount4 = Number(req.session.amount4)
@@ -230,16 +240,7 @@ app.post('/order/confirm', function(req, res)
     console.log("Confirming total price as: " +totalPrice);
 
     try{
-        var mysql = require('mysql');
-
-        var connection = mysql.createConnection
-        ({
-              host     : 'localhost',
-              user     : 'root',
-              password : '',
-              database : 'project'
-        });
-
+        //connection.connect();
         var sql = "INSERT INTO `project`.`orders` (`seller`, `donut1-count`, `donut2-count`, `donut3-count`, `donut4-count`, `donut5-count`, `totalPrice`) VALUES ('"+username+"','"+amount1+"','"+amount2+"','"+amount3+"','"+amount4+"','"+amount5+"','"+totalPrice+"');"
         var query = connection.query(sql, function(err, result)
         {
@@ -248,7 +249,7 @@ app.post('/order/confirm', function(req, res)
 
         });
         res.render("confirmation.ejs");
-        connection.end();
+        //connection.end();
     }catch(e){
         console.log(e);
     }
@@ -258,22 +259,20 @@ app.post('/order/confirm', function(req, res)
 app.post('/stockupdate', function(req, res)
     {
       console.log("Donut update values");
-      var don1 = req.body.donut1update;
-      var don2 = req.body.donut2update;
-      var don3 = req.body.donut3update;
-      var don4 = req.body.donut4update;
-      var don5 = req.body.donut5update;
+      var don1 = Number(req.body.donut1update);
+      var don2 = Number(req.body.donut2update);
+      var don3 = Number(req.body.donut3update);
+      var don4 = Number(req.body.donut4update);
+      var don5 = Number(req.body.donut5update);
+      var totalDonuts = don1+don2+don3+don4+don5;
+
+
 
       try{
-          var mysql = require('mysql');
-
-          var connection = mysql.createConnection
-          ({
-                host     : 'localhost',
-                user     : 'root',
-                password : '',
-                database : 'project'
-          });
+          //connection.connect();
+          var sql = "INSERT INTO `project`.`stockupdates` (`chef`,`donut-1`, `donut-2`, `donut-3`, `donut-4`, `donut-5`, `totalDonuts`) VALUES ("+ "\"" +req.session.username+ "\"" + ',' +don1+ ',' +don2+',' +don3+ ',' +don4+ ',' +don5+ ',' +totalDonuts+ ");";
+          var query = connection.query(sql, function(err, result) {if(err) throw err});
+          console.log("Updating stock: SQL: "+sql);
 
           var sql = "UPDATE stock SET stock = (stock + "+don1+") WHERE name = \"donut-1\";";
           console.log(sql);
@@ -290,7 +289,7 @@ app.post('/stockupdate', function(req, res)
               res.redirect("/chef");
             }, 100);
 
-          connection.end();
+          //connection.end();
       }catch(e){
           console.log(e);
       };
