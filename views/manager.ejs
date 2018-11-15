@@ -1,8 +1,49 @@
+<head>
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <script src="javascripts/scroll.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+</head>
+
 <body>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/manager.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
   <% include templates/nav%>
+
   <center>
     <h1 style="padding-top: 100px;">Manager</h1>
-  </center>
 
-  
+
+  <div id="managerContent">
+    <div class="column">
+      <h2>Popular donuts</h2>
+
+      <table>
+        <tr>
+          <th>Donut</th><th>Amount sold</th>
+        </tr>
+      </table>
+    </div>
+
+    <div class="column">
+      <h2>Sales Performance</h2>
+      <table>
+        <tr>
+          <th>Seller</th> <th>Total Revenue</th>
+        </tr>
+      </table>
+    </div>
+
+    <div class="column">
+      <h2>Chef Performance</h2>
+      <table>
+        <tr>
+          <th>Chef</th> <th>Donuts Made</th>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  </center>
 </body>

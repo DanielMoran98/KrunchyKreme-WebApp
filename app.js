@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
+var mysql = require('mysql')
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -35,7 +37,12 @@ app.use(function(req, res, next) { //Add Session vars to be used in ejs files
   res.locals.totalPrice = req.session.totalPrice;
   next();
 });
-
+var connection = mysql.createConnection({
+      host     : 'localhost',
+      user     : 'root',
+      password : '',
+      database : 'project'
+    });
 
 
 app.all('/logout', function(req, res){
@@ -65,16 +72,10 @@ app.get('/home', function(req, res)
 
 app.post('/login', function(req, res)
 {
-  var mysql = require('mysql')
   var username = req.body.username;
   var password = req.body.password;
   req.session.username = username;
-  var connection = mysql.createConnection({
-        host     : 'localhost',
-        user     : 'root',
-        password : '',
-        database : 'project'
-      });
+
 
   var sql = "SELECT * FROM users WHERE username = '" + username +"' AND password = '" + password + "'";
 

@@ -1,0 +1,24 @@
+#managerContent{
+  text-align: center;
+}
+
+#managerContent .column{
+  display:inline-block;
+  background-color:white;
+  border-radius:10px;
+  margin: 0 5px;
+  width: 30%;
+
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#managerContent table{
+  text-align:center;
+  width:100%;
+  border:1px solid green;
+}

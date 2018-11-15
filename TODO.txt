@@ -3,4 +3,4 @@ Navbar with logout and logo
 
 Update stock after order complete
 
-Make /home route that checks access type and redirects to sales/chef/manager
+Implement chart.js
