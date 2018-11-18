@@ -1,12 +1,14 @@
-body #login{
-
+#login{
+  overflow:hidden;
 }
-
 #login #content{
   width:30%;
   align:center;
   text-align:center;
   margin:10% auto;
+  background-color: white;
+  border-radius:15px;
+  padding:50px;
 }
 #login #content img{
   height:auto;
@@ -16,4 +18,9 @@ body #login{
 
 #errorBox{
   display:hidden;
+}
+
+#login .ui-page {
+  background-color:#001f3f;
+  overflow: hidden;
 }

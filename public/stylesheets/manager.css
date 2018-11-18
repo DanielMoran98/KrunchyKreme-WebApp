@@ -1,5 +1,6 @@
 #managerContent{
   text-align: center;
+
 }
 
 #managerContent .column{
@@ -7,6 +8,7 @@
   background-color:white;
   border-radius:10px;
   margin: 0 5px;
+  min-height:360px;
   width: 30%;
 
 }
@@ -24,9 +26,14 @@
 }
 #managerContent table td{
   padding: 5px 0 5px 0;
-  text-align-last: center; 
+  text-align-last: center;
 }
 
-#managerContent table td::after{
 
+@media screen and (max-width: 600px) {
+    .column {
+        width: 75% !important;
+        margin-top:10px !important;
+        margin-bottom:10px !important;
+    }
 }

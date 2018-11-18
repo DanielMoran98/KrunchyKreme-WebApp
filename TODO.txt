@@ -4,3 +4,5 @@ Navbar with logout and logo
 Update stock after order complete
 
 Implement chart.js
+
+Set min width on manager page columns

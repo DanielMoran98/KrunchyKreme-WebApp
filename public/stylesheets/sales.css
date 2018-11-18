@@ -68,7 +68,42 @@ input{
 
 }
 
-
+.submitButton{
+  border: none;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
 form{
   margin-bottom:0px;
+}
+
+@media screen and (max-width: 900px) {
+    #landingMsg {
+        font-size:2em !important;
+    }
+    #donuts{
+
+    }
+    #donuts ul{
+      width:50% !important;
+    }
+    #donuts ul:last-of-type{
+      margin-bottom:50px !important;
+    }
+    .submitButton{
+      position:fixed !important;
+      bottom:0px !important;
+      z-index: 2;
+    }
+    #sidebar{
+      position:relative;
+      width:80%;
+      margin-bottom:120px;
+      text-align:center;
+      z-index:1;
+      max-width: none !important;
+    }
+    #sidebar table{
+      width:100%;
+    }
 }

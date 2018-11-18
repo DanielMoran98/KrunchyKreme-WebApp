@@ -25,3 +25,8 @@
   left:45%;
   opacity:2.0;
 }
+@media screen and (max-width: 600px) {
+    #nav img {
+        left:10% !important;
+    }
+}

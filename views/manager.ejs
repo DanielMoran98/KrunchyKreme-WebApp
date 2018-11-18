@@ -17,26 +17,26 @@
 
   <div id="managerContent">
     <div class="column">
-      <h2>Popular donuts</h2>
+      <h2>Popular Donuts</h2>
 
       <table>
         <tr>
           <th>Donut</th><th>Amount sold</th>
         </tr>
         <tr>
-          <td>Original Glazed </td> <td> <%=results[0].donut1 %> </td>
+          <td>Original Glazed </td> <td> <%=popularDonuts[0].donut1 %> </td>
         </tr>
         <tr>
-          <td> Strawberry Original </td> <td> <%=results[0].donut2 %> </td>
+          <td> Strawberry Original </td> <td> <%=popularDonuts[0].donut2 %> </td>
         </tr>
         <tr>
-          <td> White Chocolate & Milk Choc Drizzle </td> <td> <%=results[0].donut3 %> </td>
+          <td> White Chocolate & Milk Choc Drizzle </td> <td> <%=popularDonuts[0].donut3 %> </td>
         </tr>
         <tr>
-          <td> Chocolate & Nutella / Hazlenuts </td> <td> <%=results[0].donut4 %> </td>
+          <td> Chocolate & Nutella / Hazlenuts </td> <td> <%=popularDonuts[0].donut4 %> </td>
         </tr>
         <tr>
-          <td> Chocolate & M&Ms </td> <td> <%=results[0].donut5 %> </td>
+          <td> Chocolate & M&Ms </td> <td> <%=popularDonuts[0].donut5 %> </td>
         </tr>
 
 
@@ -49,6 +49,16 @@
         <tr>
           <th>Seller</th> <th>Total Revenue</th>
         </tr>
+        <tr>
+          <td> <%= sellerPerformance[0].seller%> </td> <td> €<%= sellerPerformance[0].totalSold %> </td>
+        </tr>
+        <tr>
+          <td> <%= sellerPerformance[1].seller%> </td> <td> €<%= sellerPerformance[1].totalSold %> </td>
+        </tr>
+        <tr>
+          <td> <%= sellerPerformance[2].seller%> </td> <td> €<%= sellerPerformance[2].totalSold %> </td>
+        </tr>
+
       </table>
     </div>
 
@@ -57,6 +67,12 @@
       <table>
         <tr>
           <th>Chef</th> <th>Donuts Made</th>
+        </tr>
+        <tr>
+          <td> <%= chefPerformance[0].chef%> </td> <td> <%= chefPerformance[0].totalDonuts %> </td>
+        </tr>
+        <tr>
+          <td> <%= chefPerformance[1].chef%> </td> <td> <%= chefPerformance[1].totalDonuts %> </td>
         </tr>
       </table>
     </div>

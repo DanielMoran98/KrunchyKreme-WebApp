@@ -151,15 +151,39 @@ app.get('/manager', function(req, res)
  {
    if(req.session.access == 2)
    {
+     var popularDonuts;
+     var sellerPerformance;
+     var chefPerformance;
+
+
      var sql = "SELECT sum(`donut1-count`) as \"donut1\", sum(`donut2-count`)as \"donut2\", sum(`donut3-count`)as \"donut3\", sum(`donut4-count`)as \"donut4\", sum(`donut5-count`)as \"donut5\" FROM orders;"
      try
      {
        var query = connection.query(sql, function (error, results, fields)
        {
          if (error) throw(error);
+         popularDonuts = results;
 
-         console.log("results[0]: "+ JSON.stringify(results[0]));
-         res.render('manager.ejs', {results} );
+         console.log("popularDonuts: "+ JSON.stringify(popularDonuts[0]));
+
+         var sql = "SELECT seller, cast(sum(totalPrice) as decimal(10,2)) as totalSold FROM orders GROUP BY seller ORDER BY totalSold DESC;";
+         var query = connection.query(sql, function (error, results, fields)
+         {
+           if (error) throw(error);
+           sellerPerformance = results;
+           console.log("Seller Performance: "+ JSON.stringify(sellerPerformance));
+
+
+            var sql ="SELECT chef, sum(totalDonuts) AS totalDonuts FROM stockupdates GROUP BY chef ORDER BY totalDonuts DESC;"
+            var query = connection.query(sql, function (error, results, fields)
+            {
+              if (error) throw(error);
+              chefPerformance = results;
+              console.log("Chef Performance: "+ JSON.stringify(chefPerformance));
+              res.render('manager.ejs', {popularDonuts: popularDonuts, sellerPerformance: sellerPerformance, chefPerformance: chefPerformance} );
+           });
+        });
+
        });
 
 
