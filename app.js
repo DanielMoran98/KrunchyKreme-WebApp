@@ -252,6 +252,8 @@ app.post('/order', function(req, res)
 
 app.post('/order/confirm', function(req, res)
   {
+    var inStock = true;
+    var stockValues;
 
     var username = req.session.username;
     var amount1 = Number(req.session.amount1);
@@ -262,21 +264,72 @@ app.post('/order/confirm', function(req, res)
     var totalPrice = Number(req.session.totalPrice)
 
     console.log("Confirming total price as: " +totalPrice);
-
-    try{
-        //connection.connect();
-        var sql = "INSERT INTO `project`.`orders` (`seller`, `donut1-count`, `donut2-count`, `donut3-count`, `donut4-count`, `donut5-count`, `totalPrice`) VALUES ('"+username+"','"+amount1+"','"+amount2+"','"+amount3+"','"+amount4+"','"+amount5+"','"+totalPrice+"');"
-        var query = connection.query(sql, function(err, result)
-        {
-          if(err) throw err
-          console.log("Inserting data...");
-
-        });
-        res.render("confirmation.ejs");
-        //connection.end();
-    }catch(e){
-        console.log(e);
+    if(totalPrice <= 0)
+    {
+      res.render('message.ejs', {message: "We couldn't confirm that order because your cart was empty!"})
     }
+
+    try{ //Reduce stock numbers
+
+
+      var sql = "SELECT stock FROM stock";
+      var query = connection.query(sql, function(err, result)
+      {
+        stockValues == result;
+        console.log("Checking for stock...");
+        if(amount1 > result[0].stock){inStock=false;}
+        if(amount2 > result[1].stock){inStock=false;}
+        if(amount3 > result[2].stock){inStock=false;}
+        if(amount4 > result[3].stock){inStock=false;}
+        if(amount5 > result[4].stock){inStock=false;}
+      });
+      setTimeout(function() {
+        if(inStock == false){console.log("Out of stock"); res.render('message.ejs', {message: "We don't have enough stock :( "})}
+        if(inStock == true)
+        {
+          try{ //Update stock values
+            console.log("Updating stock...");
+            var sql = "UPDATE stock SET stock = stock - "+ amount1 +" WHERE id = 1";
+            var query = connection.query(sql, function(err, results){if(err) throw (err) });
+            var sql = "UPDATE stock SET stock = stock - "+ amount2 +" WHERE id = 2";
+            var query = connection.query(sql, function(err, results){if(err) throw (err) });
+            var sql = "UPDATE stock SET stock = stock - "+ amount3 +" WHERE id = 3";
+            var query = connection.query(sql, function(err, results){if(err) throw (err) });
+            var sql = "UPDATE stock SET stock = stock - "+ amount4 +" WHERE id = 4";
+            var query = connection.query(sql, function(err, results){if(err) throw (err) });
+            var sql = "UPDATE stock SET stock = stock - "+ amount5 +" WHERE id = 5";
+            var query = connection.query(sql, function(err, results){if(err) throw (err) });
+
+          }catch(e){
+            console.log(e);
+          }
+        }
+        if(inStock == true)
+        {
+          try{ //Add an order update to DB
+            //connection.connect();
+            var sql = "INSERT INTO `project`.`orders` (`seller`, `donut1-count`, `donut2-count`, `donut3-count`, `donut4-count`, `donut5-count`, `totalPrice`) VALUES ('"+username+"','"+amount1+"','"+amount2+"','"+amount3+"','"+amount4+"','"+amount5+"','"+totalPrice+"');"
+            var query = connection.query(sql, function(err, result)
+            {
+              if(err) throw err
+              console.log("Inserting data...");
+
+            });
+
+              res.render("confirmation.ejs");
+            }catch(e){
+                console.log(e);
+            }
+        }
+
+        }, 250);
+
+    }catch(e){
+      console.log(e);
+    }
+
+
+
 
   });
 
@@ -291,8 +344,7 @@ app.post('/stockupdate', function(req, res)
       var totalDonuts = don1+don2+don3+don4+don5;
 
 
-
-      try{
+      try{ //Log a stockupdate to DB
           //connection.connect();
           var sql = "INSERT INTO `project`.`stockupdates` (`chef`,`donut-1`, `donut-2`, `donut-3`, `donut-4`, `donut-5`, `totalDonuts`) VALUES ("+ "\"" +req.session.username+ "\"" + ',' +don1+ ',' +don2+',' +don3+ ',' +don4+ ',' +don5+ ',' +totalDonuts+ ");";
           var query = connection.query(sql, function(err, result) {if(err) throw err});
