@@ -82,7 +82,7 @@ app.post('/login', function(req, res)
   //connection.connect();
 
   var query = connection.query(sql, function (error, results, fields){
-    if (error) next(error);
+    if (error) throw(error);
 
     try{
       console.log("Results " + results[0].access);
