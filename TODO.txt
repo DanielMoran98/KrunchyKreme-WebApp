@@ -1,8 +1,0 @@
-Navbar with logout and logo
-  -Make navbar transparent until scroll
-
-Update stock after order complete
-
-Implement chart.js
-
-Set min width on manager page columns

@@ -7,7 +7,6 @@ A web-app designed for staff use at a doughnut shop.
 ### Sales
 Takes orders from customers and checks them out through the sales page.
 
-
 ### Chef
 Cooks the doughnuts and manages the stock of each doughnut through the chef page.
 
