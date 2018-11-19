@@ -38,10 +38,11 @@ app.use(function(req, res, next) { //Add Session vars to be used in ejs files
   next();
 });
 var connection = mysql.createConnection({
-      host     : 'localhost',
-      user     : 'root',
-      password : '',
-      database : 'project'
+      host     : 'ec2-79-125-124-30.eu-west-1.compute.amazonaws.com',
+      user     : 'gkdmkcathoazuj',
+      password : 'f12c4b1bd203a71a256d120529b143aea7d510ca51b560a8d84dbb79accc39bb',
+      database : 'd3t5cnjjlaahi',
+      port     : '5432'
     });
 
 
