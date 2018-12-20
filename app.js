@@ -7,7 +7,15 @@ var session = require('express-session');
 var mysql = require('mysql')
 const favicon = require('express-favicon');
 
+
+//Security/Validation packages
+var jsesc = require('jsesc');
+var bcrypt = require('bcryptjs');
+var validator = require('validator');
+var sqlstring = require('sqlstring');
+
 //External Routes
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -49,6 +57,21 @@ var connection = mysql.createConnection({
     });
 
 
+app.get('/test/:pass', function(req, res){
+  bcrypt.hash(req.params.pass, 10, function(err, hash) {
+  // Store hash in your password DB.
+  console.log(req.params.pass);
+  console.log("Hashing... :" + hash);
+
+    bcrypt.compare(req.params.pass, '$2a$10$qGqKfEvXBq34EoGAtwu9c.MY355jUmCqje4hyUkLpMPsOtxDZrt52', function(err, res) {
+        if(res===true){
+          console.log("Same");
+        }else{
+          console.log("Not same");
+        }
+    });
+  });
+})
 app.all('/logout', function(req, res){
     req.session.destroy();
     res.redirect('/');
@@ -69,47 +92,67 @@ app.get('/login', function(req, res){
   }
 });
 
-app.get('/home', function(req, res)
-{
-
-});
 
 app.post('/login', function(req, res)
 {
-  var username = req.body.username;
-  var password = req.body.password;
+  var username = jsesc(req.body.username);
+  var password = jsesc(req.body.password);
+  console.log(username.length + ' ' +password.length)
+  if(validator.isLength(username, {min: 3, max: 24} && validator.isLength(password, {min: 3, max: 24})))
+  {
+    console.log("Valid")
+  }else
+  {
+    console.log("Not valid - Too long")
+    res.render('index.ejs', {info: "Username or password is too long or too short! (3-24 characters)"})
+  }
+
   req.session.username = username;
 
+//Validate
 
-  var sql = "SELECT * FROM users WHERE username = '" + username +"' AND password = '" + password + "'";
 
-  //connection.connect();
-
+  var sql = "SELECT * FROM users WHERE username = " + sqlstring.escape(username) +"";
   var query = connection.query(sql, function (error, results, fields){
     if (error) throw(error);
 
     try{
+      var hash = results[0].password;
+
+      bcrypt.compare(password, hash, function(err, result) {
+        console.log("Pass: " +password);
+        console.log("Hash: " + hash);
+          if(result===true){
+            console.log("Same");
+
+            if(results[0].access == 2)
+            {
+              console.log("Logging in " +username+ " as manager")
+              req.session.access = 2;
+              res.redirect('/manager');
+            }
+            if(results[0].access == 1)
+            {
+              console.log("Logging in " +username+ " as chef")
+              req.session.access = 1;
+              res.redirect('/chef');
+            }
+            if(results[0].access == 0)
+            {
+              console.log("Logging in " +username+ " as sales")
+              req.session.access = 0;
+              res.redirect('/sales');
+            }
+
+          }else{
+            console.log("Not same");
+
+            res.render('index.ejs', {info: "Invalid Login!"});
+          }
+      });
+
       console.log("Results " + results[0].access);
 
-      if(results[0].access == 2)
-      {
-        console.log("Logging in " +username+ " as manager")
-        req.session.access = 2;
-        res.redirect('/manager');
-      }
-      if(results[0].access == 1)
-      {
-        console.log("Logging in " +username+ " as chef")
-        req.session.access = 1;
-
-        res.redirect('/chef');
-      }
-      if(results[0].access == 0)
-      {
-        console.log("Logging in " +username+ " as sales")
-        req.session.access = 0;
-        res.redirect('/sales');
-      }
 
 
   }catch(e){console.log(e); console.log("Username or Password is incorrect"); res.render('index.ejs', {info: "Invalid Login"}); }
@@ -223,18 +266,18 @@ app.post('/order', function(req, res)
   {
     console.log(req.session);
     console.log("ACCESS LEVEL ===== " + req.session.access)
-    req.session.amount1 = req.body.amount1;
-    req.session.amount2 = req.body.amount2;
-    req.session.amount3 = req.body.amount3;
-    req.session.amount4 = req.body.amount4;
-    req.session.amount5 = req.body.amount5;
+    req.session.amount1 = jsesc(req.body.amount1);
+    req.session.amount2 = jsesc(req.body.amount2);
+    req.session.amount3 = jsesc(req.body.amount3);
+    req.session.amount4 = jsesc(req.body.amount4);
+    req.session.amount5 = jsesc(req.body.amount5);
 
     console.log(req.session.amount1 + " is the session variable");
-    var amount1 = Number(req.body.amount1);
-    var amount2 = Number(req.body.amount2);
-    var amount3 = Number(req.body.amount3);
-    var amount4 = Number(req.body.amount4);
-    var amount5 = Number(req.body.amount5);
+    var amount1 = jsesc(Number(req.body.amount1));
+    var amount2 = jsesc(Number(req.body.amount2));
+    var amount3 = jsesc(Number(req.body.amount3));
+    var amount4 = jsesc(Number(req.body.amount4));
+    var amount5 = jsesc(Number(req.body.amount5));
     var price1 = req.session.amount1*1.99;
     var price2 = req.session.amount2*2.49;
     var price3 = req.session.amount3*2.99;
@@ -273,9 +316,8 @@ app.post('/order/confirm', function(req, res)
       res.render('message.ejs', {message: "We couldn't confirm that order because your cart was empty!"})
     }
 
+
     try{ //Reduce stock numbers
-
-
       var sql = "SELECT stock FROM stock";
       var query = connection.query(sql, function(err, result)
       {
@@ -325,9 +367,7 @@ app.post('/order/confirm', function(req, res)
                 console.log(e);
             }
         }
-
         }, 250);
-
     }catch(e){
       console.log(e);
     }
@@ -340,30 +380,30 @@ app.post('/order/confirm', function(req, res)
 app.post('/stockupdate', function(req, res)
     {
       console.log("Donut update values");
-      var don1 = Number(req.body.donut1update);
-      var don2 = Number(req.body.donut2update);
-      var don3 = Number(req.body.donut3update);
-      var don4 = Number(req.body.donut4update);
-      var don5 = Number(req.body.donut5update);
+      var don3 = Number(jsesc(req.body.donut3update));
+      var don1 = Number(jsesc(req.body.donut1update));
+      var don2 = Number(jsesc(req.body.donut2update));
+      var don4 = Number(jsesc(req.body.donut4update));
+      var don5 = Number(jsesc(req.body.donut5update));
       var totalDonuts = don1+don2+don3+don4+don5;
 
 
       try{ //Log a stockupdate to DB
           //connection.connect();
-          var sql = "INSERT INTO `project`.`stockupdates` (`chef`,`donut-1`, `donut-2`, `donut-3`, `donut-4`, `donut-5`, `totalDonuts`) VALUES ("+ "\"" +req.session.username+ "\"" + ',' +don1+ ',' +don2+',' +don3+ ',' +don4+ ',' +don5+ ',' +totalDonuts+ ");";
+          var sql = "INSERT INTO `project`.`stockupdates` (`chef`,`donut-1`, `donut-2`, `donut-3`, `donut-4`, `donut-5`, `totalDonuts`) VALUES ("+ "\"" +req.session.username+ "\"" + ',' +sqlstring.escape(don1)+ ',' +sqlstring.escape(don2)+',' +sqlstring.escape(don3)+ ',' +sqlstring.escape(don4)+ ',' +sqlstring.escape(don5)+ ',' +sqlstring.escape(totalDonuts)+ ");";
           var query = connection.query(sql, function(err, result) {if(err) throw err});
           console.log("Updating stock: SQL: "+sql);
 
-          var sql = "UPDATE stock SET stock = (stock + "+don1+") WHERE name = \"donut-1\";";
+          var sql = "UPDATE stock SET stock = (stock + "+sqlstring.escape(don1)+") WHERE name = \"donut-1\";";
           console.log(sql);
           var query = connection.query(sql, function(err, result) {if(err) throw err});
-          var sql = "UPDATE stock SET stock = (stock + "+don2+") WHERE name = \"donut-2\";";
+          var sql = "UPDATE stock SET stock = (stock + "+sqlstring.escape(don2)+") WHERE name = \"donut-2\";";
           var query = connection.query(sql, function(err, result) {if(err) throw err});
-          var sql = "UPDATE stock SET stock = (stock + "+don3+") WHERE name = \"donut-3\";";
+          var sql = "UPDATE stock SET stock = (stock + "+sqlstring.escape(don3)+") WHERE name = \"donut-3\";";
           var query = connection.query(sql, function(err, result) {if(err) throw err});
-          var sql = "UPDATE stock SET stock = (stock + "+don4+") WHERE name = \"donut-4\";";
+          var sql = "UPDATE stock SET stock = (stock + "+sqlstring.escape(don4)+") WHERE name = \"donut-4\";";
           var query = connection.query(sql, function(err, result) {if(err) throw err});
-          var sql = "UPDATE stock SET stock = (stock + "+don5+") WHERE name = \"donut-5\";";
+          var sql = "UPDATE stock SET stock = (stock + "+sqlstring.escape(don5)+") WHERE name = \"donut-5\";";
           var query = connection.query(sql, function(err, result) {if(err) throw err});
           setTimeout(function() {
               res.redirect("/chef");
