@@ -5,10 +5,10 @@ A web-app designed for staff use at a doughnut shop.
 
 ## Account types
 ### Sales
-Takes orders from customers and checks them out through the sales page.
+Operates the point of sale section.
 
 ### Chef
-Cooks the doughnuts and manages the stock of each doughnut through the chef page.
+Updates stock information when new donuts are made through the chef section.
 
 ### Manager
-Overviews statistics such as which doughnuts are most popular, as well as how each employee is performing through the manager page.
+Overviews statistics such as which doughnuts are most popular, as well as how each employee is performing, through the manager section.
