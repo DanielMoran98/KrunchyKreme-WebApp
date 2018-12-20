@@ -57,21 +57,6 @@ var connection = mysql.createConnection({
     });
 
 
-app.get('/test/:pass', function(req, res){
-  bcrypt.hash(req.params.pass, 10, function(err, hash) {
-  // Store hash in your password DB.
-  console.log(req.params.pass);
-  console.log("Hashing... :" + hash);
-
-    bcrypt.compare(req.params.pass, '$2a$10$qGqKfEvXBq34EoGAtwu9c.MY355jUmCqje4hyUkLpMPsOtxDZrt52', function(err, res) {
-        if(res===true){
-          console.log("Same");
-        }else{
-          console.log("Not same");
-        }
-    });
-  });
-})
 app.all('/logout', function(req, res){
     req.session.destroy();
     res.redirect('/');
@@ -335,15 +320,15 @@ app.post('/order/confirm', function(req, res)
         {
           try{ //Update stock values
             console.log("Updating stock...");
-            var sql = "UPDATE stock SET stock = stock - "+ amount1 +" WHERE id = 1";
+            var sql = "UPDATE stock SET stock = stock - "+ sqlstring.escape(amount1) +" WHERE id = 1";
             var query = connection.query(sql, function(err, results){if(err) throw (err) });
-            var sql = "UPDATE stock SET stock = stock - "+ amount2 +" WHERE id = 2";
+            var sql = "UPDATE stock SET stock = stock - "+ sqlstring.escape(amount2) +" WHERE id = 2";
             var query = connection.query(sql, function(err, results){if(err) throw (err) });
-            var sql = "UPDATE stock SET stock = stock - "+ amount3 +" WHERE id = 3";
+            var sql = "UPDATE stock SET stock = stock - "+ sqlstring.escape(amount3) +" WHERE id = 3";
             var query = connection.query(sql, function(err, results){if(err) throw (err) });
-            var sql = "UPDATE stock SET stock = stock - "+ amount4 +" WHERE id = 4";
+            var sql = "UPDATE stock SET stock = stock - "+ sqlstring.escape(amount4) +" WHERE id = 4";
             var query = connection.query(sql, function(err, results){if(err) throw (err) });
-            var sql = "UPDATE stock SET stock = stock - "+ amount5 +" WHERE id = 5";
+            var sql = "UPDATE stock SET stock = stock - "+ sqlstring.escape(amount5) +" WHERE id = 5";
             var query = connection.query(sql, function(err, results){if(err) throw (err) });
 
           }catch(e){
@@ -354,7 +339,7 @@ app.post('/order/confirm', function(req, res)
         {
           try{ //Add an order update to DB
             //connection.connect();
-            var sql = "INSERT INTO `project`.`orders` (`seller`, `donut1-count`, `donut2-count`, `donut3-count`, `donut4-count`, `donut5-count`, `totalPrice`) VALUES ('"+username+"','"+amount1+"','"+amount2+"','"+amount3+"','"+amount4+"','"+amount5+"','"+totalPrice+"');"
+            var sql = "INSERT INTO `project`.`orders` (`seller`, `donut1-count`, `donut2-count`, `donut3-count`, `donut4-count`, `donut5-count`, `totalPrice`) VALUES ("+sqlstring.escape(username)+","+sqlstring.escape(amount1)+","+sqlstring.escape(amount2)+","+sqlstring.escape(amount3)+","+sqlstring.escape(amount4)+","+sqlstring.escape(amount5)+","+sqlstring.escape(totalPrice)+");"
             var query = connection.query(sql, function(err, result)
             {
               if(err) throw err
