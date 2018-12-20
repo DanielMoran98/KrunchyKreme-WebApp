@@ -72,10 +72,14 @@ input{
   border: none;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
+  background-color: #001f3f !important;
+  color:white !important;
 }
 form{
   margin-bottom:0px;
 }
+
+
 
 @media screen and (max-width: 900px) {
     #landingMsg {
