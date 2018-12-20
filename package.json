@@ -6,13 +6,17 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
     "http-errors": "~1.6.2",
+    "jsesc": "^2.5.2",
     "morgan": "~1.9.0",
-    "mysql": "^2.16.0"
+    "mysql": "^2.16.0",
+    "sqlstring": "^2.3.1",
+    "validator": "^10.9.0"
   }
 }
