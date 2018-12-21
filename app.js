@@ -57,6 +57,7 @@ var connection = mysql.createConnection({
     });
 
 
+
 app.all('/logout', function(req, res){
     req.session.destroy();
     res.redirect('/');
@@ -83,15 +84,17 @@ app.post('/login', function(req, res)
   var username = jsesc(req.body.username);
   var password = jsesc(req.body.password);
   console.log(username.length + ' ' +password.length)
-  if(validator.isLength(username, {min: 3, max: 24} && validator.isLength(password, {min: 3, max: 24})))
-  {
-    console.log("Valid")
-  }else
-  {
-    console.log("Not valid - Too long")
-    res.render('index.ejs', {info: "Username or password is too long or too short! (3-24 characters)"})
-  }
 
+  //Validate login strings
+
+  if(username.length >= 3 && username.length <= 24   &&   password.length >= 3 && password.length <= 24 )
+  {
+    console.log("Input is ok")
+  }else{
+    console.log("Input is not ok")
+    res.render('index.ejs', {info: "Username or password is too long or too short! (3-24 characters)"})
+    res.end()
+  }
   req.session.username = username;
 
 //Validate
@@ -251,6 +254,15 @@ app.post('/order', function(req, res)
   {
     console.log(req.session);
     console.log("ACCESS LEVEL ===== " + req.session.access)
+    //MAKE SURE ALL INPUTS ARE ACTUALLY NUMBERS
+    if(isNaN(req.body.amount1) || isNaN(req.body.amount2) || isNaN(req.body.amount3) || isNaN(req.body.amount4) || isNaN(req.body.amount5))
+    {
+      //If any input is NaN, dont continue
+      res.render('message.ejs', {message: 'You have tried to enter a non number value. This is not possible'})
+      res.end();
+      return;
+
+    }
     req.session.amount1 = jsesc(req.body.amount1);
     req.session.amount2 = jsesc(req.body.amount2);
     req.session.amount3 = jsesc(req.body.amount3);
@@ -372,6 +384,14 @@ app.post('/stockupdate', function(req, res)
       var don5 = Number(jsesc(req.body.donut5update));
       var totalDonuts = don1+don2+don3+don4+don5;
 
+      //MAKE SURE ALL INPUTS ARE ACTUALLY NUMBERS
+      if(isNaN(don1) || isNaN(don2) || isNaN(don3) || isNaN(don4) || isNaN(don5))
+      {
+        //If any input is NaN, dont continue
+        res.render('message.ejs', {message: 'You have tried to enter a non number value. This is not possible'})
+        res.end();
+        return;
+      }
 
       try{ //Log a stockupdate to DB
           //connection.connect();
