@@ -23,15 +23,25 @@ Overviews statistics such as which doughnuts are most popular, as well as how ea
 
 ## Screenshots
 
-Login
+### Login
 ![KrunchyKreme 1](https://i.imgur.com/DUniXfy.png)
-Landing Page
+
+### Landing Page
+
 ![KrunchyKreme 2](https://i.imgur.com/lUBkAhv.jpg)
-Sales Page
+
+### Sales Page
+
 ![KrunchyKreme 3](https://i.imgur.com/Los93qA.png)
-Chef Page
+
+### Chef Page
+
 ![KrunchyKreme 4](https://i.imgur.com/NNPb4rH.png)
-Manager Page
+
+### Manager Page
+
 ![KrunchyKreme 5](https://i.imgur.com/onavWBT.png)
-Not enough stock :(
+
+### Not enough stock :(
+
 ![KrunchyKreme 6](https://i.imgur.com/WcArsgl.png)
