@@ -21,4 +21,17 @@ Overviews statistics such as which doughnuts are most popular, as well as how ea
 * jQuery Mobile
 * MySQL
 
-### Screenshots
+## Screenshots
+
+Login
+![KrunchyKreme 1](https://i.imgur.com/DUniXfy.png)
+Landing Page
+![KrunchyKreme 2](https://i.imgur.com/lUBkAhv.jpg)
+Sales Page
+![KrunchyKreme 3](https://i.imgur.com/Los93qA.png)
+Chef Page
+![KrunchyKreme 4](https://i.imgur.com/NNPb4rH.png)
+Manager Page
+![KrunchyKreme 5](https://i.imgur.com/onavWBT.png)
+Not enough stock :(
+![KrunchyKreme 6](https://i.imgur.com/WcArsgl.png)
