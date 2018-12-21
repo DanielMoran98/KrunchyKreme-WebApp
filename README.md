@@ -1,5 +1,4 @@
-# krunchy-kreme-doughnuts-project
-
+# KrunchyKreme-WebApp
 A web-app designed for staff use at a doughnut shop.
 
 
