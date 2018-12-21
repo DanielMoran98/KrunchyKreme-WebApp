@@ -12,3 +12,13 @@ Updates stock information when new donuts are made through the chef section.
 
 ### Manager
 Overviews statistics such as which doughnuts are most popular, as well as how each employee is performing, through the manager section.
+
+## Technologies used
+
+* Node.js
+* Express.js
+* EJS
+* jQuery Mobile
+* MySQL
+
+### Screenshots
